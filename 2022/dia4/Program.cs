@@ -49,37 +49,27 @@ class CampCleanup
         int resultado = 0;
 
         //part1
-        // foreach (string line in lines)
-        // {
-        //     string[] pairs = line.Split(",");
-
-        //     RangeSections[] rangePairs = new RangeSections[2];
-
-        //     for (int i = 0; i < 2; i++)
-        //     {
-        //         rangePairs[i] = new RangeSections(pairs[i]);
-        //     }
-
-        //     if (
-        //         rangePairs[0].FullyContains(rangePairs[1])
-        //         || rangePairs[1].FullyContains(rangePairs[0])
-        //         )
-        //     {
-        //         resultado++;
-
-        //     }
-
-        // }
         foreach (string line in lines)
         {
-            string[] pairs = line.Split(",");
 
-            RangeSections[] rangePairs = new RangeSections[2];
+            RangeSections[] rangePairs = CampCleanup.ParseLine(line);
 
-            for (int i = 0; i < 2; i++)
+            if (
+                rangePairs[0].FullyContains(rangePairs[1])
+                || rangePairs[1].FullyContains(rangePairs[0])
+                )
             {
-                rangePairs[i] = new RangeSections(pairs[i]);
+                resultado++;
             }
+        }
+
+        resultado = 0;
+
+        //part2
+        foreach (string line in lines)
+        {
+
+            RangeSections[] rangePairs = CampCleanup.ParseLine(line);
 
             if (
                 rangePairs[0].PartiallyContains(rangePairs[1])
@@ -87,11 +77,24 @@ class CampCleanup
                 )
             {
                 resultado++;
-
             }
 
         }
 
         Console.WriteLine(resultado);
+    }
+
+    private static RangeSections[] ParseLine(string line)
+    {
+        string[] pairs = line.Split(",");
+
+        RangeSections[] rangePairs = new RangeSections[2];
+
+        for (int i = 0; i < 2; i++)
+        {
+            rangePairs[i] = new RangeSections(pairs[i]);
+        }
+
+        return rangePairs;
     }
 }
