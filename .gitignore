@@ -21,3 +21,11 @@ obj/
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+
+# python
+*.pyc
+__pycache__/
+venv/
+env/
+env.bak/
+
