@@ -3,18 +3,18 @@ use std::collections::HashMap;
 fn get_colors_values_from_take(take: &str) -> [i32; 3] {
     let mut colors_values = [0, 0, 0];
     let _ = take
-        .split(",")
+        .split(',')
         .map(|pair| {
             let pair: Vec<&str> = pair.split_whitespace().collect();
 
-            match pair.get(1).unwrap() {
-                &"red" => {
+            match *pair.get(1).unwrap() {
+                "red" => {
                     colors_values[0] = pair[0].parse().unwrap();
                 }
-                &"green" => {
+                "green" => {
                     colors_values[1] = pair[0].parse().unwrap();
                 }
-                &"blue" => {
+                "blue" => {
                     colors_values[2] = pair[0].parse().unwrap();
                 }
                 _ => {}
@@ -28,11 +28,11 @@ fn get_colors_values_from_take(take: &str) -> [i32; 3] {
 fn get_largests_colors(line: &str) -> [i32; 3] {
     let mut largest_colors = [0, 0, 0];
     // remove the "Game N" part
-    let binding = line.split(":").collect::<Vec<&str>>();
+    let binding = line.split(':').collect::<Vec<&str>>();
     let new_line = binding.get(1).unwrap();
 
     let _ = new_line
-        .split(";")
+        .split(';')
         .map(|take| {
             let take_values = get_colors_values_from_take(take);
             for (i, v) in take_values.iter().enumerate() {
@@ -54,22 +54,22 @@ fn is_valid_take(take: &str) -> bool {
     let valid_takes = HashMap::from([("red", 12), ("green", 13), ("blue", 14)]);
 
     let parts: Vec<&str> = take.split_whitespace().collect();
-    let quantity = parts.get(0).unwrap().parse::<i32>().unwrap();
+    let quantity = parts.first().unwrap().parse::<i32>().unwrap();
     let color = parts.get(1).unwrap();
 
-    !(valid_takes.get(color).unwrap() < &quantity)
+    valid_takes.get(color).unwrap() >= &quantity
 }
 
 fn solve_game_take(take: &str) -> bool {
-    take.split(",").all(|value| is_valid_take(value))
+    take.split(',').all(is_valid_take)
 }
 
 fn solve_game_line(line: &str) -> i32 {
     let game_value = line
-        .split(":")
+        .split(':')
         .next()
         .unwrap()
-        .split(" ")
+        .split(' ')
         .collect::<Vec<&str>>()
         .get(1)
         .unwrap()
@@ -77,16 +77,13 @@ fn solve_game_line(line: &str) -> i32 {
         .unwrap();
 
     let games = line
-        .split(":")
+        .split(':')
         .collect::<Vec<&str>>()
         .get(1)
         .unwrap()
         .trim();
 
-    let is_valid_game = games
-        .split(";")
-        .map(|take| solve_game_take(take))
-        .all(|x| x);
+    let is_valid_game = games.split(';').map(solve_game_take).all(|x| x);
 
     match is_valid_game {
         true => game_value,
@@ -95,16 +92,15 @@ fn solve_game_line(line: &str) -> i32 {
 }
 
 pub fn solve_puzzle1(input: &str) -> i32 {
-    input.lines().map(|line| solve_game_line(line)).sum()
+    input.lines().map(solve_game_line).sum()
 }
 
 pub fn solve_puzzle2(input: &str) -> i32 {
     input
         .lines()
-        .map(|line| get_largests_colors(line))
+        .map(get_largests_colors)
         .fold(0, |acc, f| acc + calculate_power(f))
 }
-
 
 #[cfg(test)]
 mod tests {

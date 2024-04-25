@@ -22,10 +22,8 @@ fn get_first_number(line: &str) -> u32 {
             return c.to_digit(10).unwrap();
         }
         for (n, v) in &numbers {
-            if i + n.len() < line.len() {
-                if line[i..i + n.len()].contains(n) {
-                    return *v;
-                }
+            if i + n.len() < line.len() && line[i..i + n.len()].contains(n) {
+                return *v;
             }
         }
     }
